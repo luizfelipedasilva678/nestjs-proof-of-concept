@@ -10,7 +10,7 @@ export class TasksService {
     private readonly taskRepository: TaskRepository,
   ) {}
 
-  async getTask(id: string): Promise<TaskDTO | undefined> {
+  async getTask(id: number): Promise<TaskDTO | undefined> {
     const task = await this.taskRepository.getTask(id);
 
     if (!task) {
@@ -42,6 +42,16 @@ export class TasksService {
   async createTask(createTaskDto: TaskDTO): Promise<TaskDTO> {
     return TasksMapper.toTaskDTO(
       await this.taskRepository.createTask(TasksMapper.toTask(createTaskDto)),
+    );
+  }
+
+  async deleteTask(id: number): Promise<void> {
+    await this.taskRepository.deleteTask(id);
+  }
+
+  async updateTask(task: TaskDTO): Promise<TaskDTO> {
+    return TasksMapper.toTaskDTO(
+      await this.taskRepository.updateTask(TasksMapper.toTask(task)),
     );
   }
 }

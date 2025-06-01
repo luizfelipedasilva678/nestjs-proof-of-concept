@@ -1,7 +1,7 @@
 class Task {
   private id: number;
-  private readonly title: string;
-  private readonly description: string;
+  private title: string;
+  private description: string;
   private isDone: boolean;
 
   constructor(
@@ -38,6 +38,14 @@ class Task {
 
   public setIsDone(isDone: boolean): void {
     this.isDone = isDone;
+  }
+
+  public setTitle(title: string): void {
+    this.title = title;
+  }
+
+  public setDescription(description: string): void {
+    this.description = description;
   }
 }
 

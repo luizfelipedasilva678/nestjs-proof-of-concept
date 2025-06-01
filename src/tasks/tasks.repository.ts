@@ -4,7 +4,7 @@ import Task from './tasks.entity';
 
 @Injectable()
 class TaskRepositoryInMemory implements TaskRepository {
-  private readonly tasks: Task[] = [];
+  private tasks: Task[] = [];
 
   async createTask(task: Task): Promise<Task> {
     this.tasks.push(task);
@@ -14,7 +14,7 @@ class TaskRepositoryInMemory implements TaskRepository {
     return Promise.resolve(task);
   }
 
-  async getTask(id: string): Promise<Task | undefined> {
+  async getTask(id: number): Promise<Task | undefined> {
     return Promise.resolve(
       this.tasks.find((task) => task.getId() === Number(id)),
     );
@@ -41,6 +41,30 @@ class TaskRepositoryInMemory implements TaskRepository {
       total: this.tasks.length,
       results: tasks,
     };
+  }
+
+  async deleteTask(id: number): Promise<void> {
+    if ((await this.getTask(id)) === undefined) {
+      throw new Error('Task not found');
+    }
+
+    this.tasks = this.tasks.filter((task) => task.getId() !== Number(id));
+
+    return Promise.resolve();
+  }
+
+  async updateTask(t: Task): Promise<Task> {
+    const task = await this.getTask(t.getId());
+
+    if (!task) {
+      throw new Error('Task not found');
+    }
+
+    task.setDescription(t.getDescription());
+    task.setTitle(t.getTitle());
+    task.setIsDone(t.getIsDone());
+
+    return Promise.resolve(task);
   }
 }
 
