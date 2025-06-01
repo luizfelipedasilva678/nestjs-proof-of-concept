@@ -1,0 +1,9 @@
+pre-commit:
+  scripts:
+    'precommit.sh':
+      runner: bash
+
+commit-msg:
+  scripts:
+    'commitlint.sh':
+      runner: bash
