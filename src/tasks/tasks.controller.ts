@@ -1,3 +1,4 @@
+import { AuthGuard } from 'src/auth/auth.guard';
 import TaskDTO from './task.dto';
 import { TasksService } from './tasks.service';
 import {
@@ -11,6 +12,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 
 @Controller('tasks')
@@ -18,11 +20,13 @@ export class TasksController {
   constructor(private readonly taskService: TasksService) {}
 
   @Post()
+  @UseGuards(AuthGuard)
   createTask(@Body() createTaskDto: TaskDTO) {
     return this.taskService.createTask(createTaskDto);
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard)
   async getTask(@Param('id', ParseIntPipe) id: number) {
     const task = await this.taskService.getTask(id);
 
@@ -34,6 +38,7 @@ export class TasksController {
   }
 
   @Get()
+  @UseGuards(AuthGuard)
   async getTasks(
     @Query('page', new ParseIntPipe({ optional: true })) page?: number,
     @Query('perPage', new ParseIntPipe({ optional: true })) perPage?: number,
@@ -45,12 +50,14 @@ export class TasksController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard)
   updateTask(@Param('id', ParseIntPipe) id: number, @Body() task: TaskDTO) {
     task.id = id;
     return this.taskService.updateTask(task);
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard)
   deleteTask(@Param('id', ParseIntPipe) id: number) {
     return this.taskService.deleteTask(id);
   }

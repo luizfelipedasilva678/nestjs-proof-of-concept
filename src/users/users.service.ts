@@ -15,4 +15,12 @@ export class UsersService {
       await this.userRepository.create(UsersMapper.toUser(userDTO)),
     );
   }
+
+  async findOne(login: string, password: string): Promise<UserDTO | undefined> {
+    const user = await this.userRepository.findOne(login, password);
+
+    if (!user) return undefined;
+
+    return UsersMapper.toUserDTO(user);
+  }
 }

@@ -9,5 +9,6 @@ import UsersRepositoryInMemory from './users.repository';
     UsersService,
     { provide: 'UserRepository', useClass: UsersRepositoryInMemory },
   ],
+  exports: [UsersService],
 })
 export class UsersModule {}
