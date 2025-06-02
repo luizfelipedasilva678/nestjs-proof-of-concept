@@ -4,6 +4,7 @@ interface TaskRepository {
   createTask(task: Task): Promise<Task>;
   getTask(id: number): Promise<Task | undefined>;
   getTasks(
+    userId: number,
     page?: number,
     limit?: number,
   ): Promise<{ page: number; perPage: number; total: number; results: Task[] }>;

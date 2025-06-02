@@ -21,6 +21,7 @@ export class TasksService {
   }
 
   async getTasks(
+    userId: number,
     page: number = 1,
     limit: number = 10,
   ): Promise<{
@@ -29,7 +30,7 @@ export class TasksService {
     total: number;
     results: Task[];
   }> {
-    const result = await this.taskRepository.getTasks(page, limit);
+    const result = await this.taskRepository.getTasks(userId, page, limit);
 
     return {
       page: result.page,

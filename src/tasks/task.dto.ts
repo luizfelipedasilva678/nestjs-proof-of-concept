@@ -1,11 +1,5 @@
 import { Exclude } from 'class-transformer';
-import {
-  IsBoolean,
-  IsNotEmpty,
-  IsNumber,
-  Length,
-  IsOptional,
-} from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, Length } from 'class-validator';
 
 export default class TaskDto {
   @IsNotEmpty()
@@ -23,11 +17,6 @@ export default class TaskDto {
   @IsNotEmpty()
   @IsBoolean()
   isDone: boolean;
-
-  @IsOptional()
-  @IsNumber()
-  @Exclude({ toPlainOnly: true })
-  userId: number;
 
   constructor(
     title: string,
