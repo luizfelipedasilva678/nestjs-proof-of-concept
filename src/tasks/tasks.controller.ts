@@ -14,6 +14,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import TasksMapper from './tasks.mapper';
 
 @Controller('tasks')
 export class TasksController {
@@ -21,8 +22,10 @@ export class TasksController {
 
   @Post()
   @UseGuards(AuthGuard)
-  createTask(@Body() createTaskDto: TaskDTO) {
-    return this.taskService.createTask(createTaskDto);
+  async createTask(@Body() createTaskDto: TaskDTO) {
+    return TasksMapper.toTaskDTO(
+      await this.taskService.createTask(TasksMapper.toTask(createTaskDto)),
+    );
   }
 
   @Get(':id')
@@ -34,7 +37,7 @@ export class TasksController {
       throw new NotFoundException("Task doesn't exist");
     }
 
-    return this.taskService.getTask(id);
+    return task;
   }
 
   @Get()
@@ -51,9 +54,14 @@ export class TasksController {
 
   @Patch(':id')
   @UseGuards(AuthGuard)
-  updateTask(@Param('id', ParseIntPipe) id: number, @Body() task: TaskDTO) {
+  async updateTask(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() task: TaskDTO,
+  ) {
     task.id = id;
-    return this.taskService.updateTask(task);
+    return TasksMapper.toTaskDTO(
+      await this.taskService.updateTask(TasksMapper.toTask(task)),
+    );
   }
 
   @Delete(':id')

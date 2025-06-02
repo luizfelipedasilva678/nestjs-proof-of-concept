@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import TaskRepository from './ports/tasks.repository';
 import Task from './tasks.entity';
+import { Knex } from 'knex';
 
 @Injectable()
-class TaskRepositoryInMemory implements TaskRepository {
+class TaskRepositoryInRDB implements TaskRepository {
   private tasks: Task[] = [];
+
+  constructor(@Inject('CONNECTION') private readonly connection: Knex) {}
 
   async createTask(task: Task): Promise<Task> {
     this.tasks.push(task);
@@ -68,4 +71,4 @@ class TaskRepositoryInMemory implements TaskRepository {
   }
 }
 
-export default TaskRepositoryInMemory;
+export default TaskRepositoryInRDB;

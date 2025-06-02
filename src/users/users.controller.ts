@@ -1,4 +1,5 @@
 import UserDTO from './users.dto';
+import UsersMapper from './users.mapper';
 import { UsersService } from './users.service';
 import {
   Body,
@@ -14,7 +15,9 @@ export class UsersController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Post()
-  create(@Body() createUserDTO: UserDTO) {
-    return this.usersService.create(createUserDTO);
+  async create(@Body() createUserDTO: UserDTO) {
+    return UsersMapper.toUserDTO(
+      await this.usersService.create(UsersMapper.toUser(createUserDTO)),
+    );
   }
 }

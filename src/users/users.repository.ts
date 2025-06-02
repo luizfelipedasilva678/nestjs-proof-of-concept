@@ -1,23 +1,37 @@
+import { Knex } from 'knex';
 import UserRepository from './ports/users.repository';
 import User from './users.entity';
+import { Inject } from '@nestjs/common';
 
-class UsersRepositoryInMemory implements UserRepository {
-  private readonly users: User[] = [];
+class UserRepositoryInRDB implements UserRepository {
+  constructor(@Inject('CONNECTION') private readonly connection: Knex) {}
 
-  create(user: User): Promise<User> {
-    user.id = this.users.length + 1;
-    this.users.push(user);
+  async create(user: User): Promise<User> {
+    const result = await this.connection('users').insert({
+      login: user.login,
+      name: user.name,
+      password: user.password,
+    });
 
-    return Promise.resolve(user);
+    user.id = result[0];
+
+    return user;
   }
 
-  findOne(login: string, password: string): Promise<User | undefined> {
-    return Promise.resolve(
-      this.users.find(
-        (user) => user.login === login && user.password === password,
-      ),
+  async findOne(login: string, password: string): Promise<User | undefined> {
+    const data = await this.connection('users').where(
+      this.connection.raw('login = ? AND password = ?', [login, password]),
     );
+
+    const user = data[0] as {
+      id: number;
+      login: string;
+      name: string;
+      password: string;
+    };
+
+    return new User(user.login, user.name, user.password, user.id);
   }
 }
 
-export default UsersRepositoryInMemory;
+export default UserRepositoryInRDB;

@@ -8,6 +8,7 @@ class TasksMapper {
       title: task.getTitle(),
       description: task.getDescription(),
       isDone: task.getIsDone(),
+      userId: 2,
     };
   }
 
