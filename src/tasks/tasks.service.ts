@@ -2,12 +2,14 @@ import { Inject, Injectable } from '@nestjs/common';
 import TaskRepository from './ports/tasks.repository';
 import TaskDTO from './task.dto';
 import TasksMapper from './tasks.mapper';
+import { Knex } from 'knex';
 
 @Injectable()
 export class TasksService {
   constructor(
     @Inject('TaskRepository')
     private readonly taskRepository: TaskRepository,
+    @Inject('KNEX_CONNECTION') private readonly connection: Knex,
   ) {}
 
   async getTask(id: number): Promise<TaskDTO | undefined> {
