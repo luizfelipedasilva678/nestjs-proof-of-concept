@@ -6,8 +6,6 @@ import User from 'src/users/users.entity';
 
 @Injectable()
 class TaskRepositoryInRDB implements TaskRepository {
-  private tasks: Task[] = [];
-
   constructor(@Inject('CONNECTION') private readonly connection: Knex) {}
 
   async createTask(task: Task): Promise<Task> {
